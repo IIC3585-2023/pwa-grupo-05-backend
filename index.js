@@ -1,28 +1,31 @@
 // import fetch from 'node-fetch';
 const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
 
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 const app = express();
 const port = 5000;
 
+app.use(cors());
+app.use(express.json());
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
-
 app.get('/tweets', async (_, res) => {
-  const response = await fetch(
+  const tweets = await fetch(
     'https://6459a3698badff578e117409.mockapi.io/tweets',
   );
-  return res.send(response);
+
+  const resJson = await tweets.json();
+  return res.send(resJson);
 });
 
 app.post('/tweets', async (req, res) => {
   const { user, body } = req.body;
+
   const tweets = await fetch(
     'https://6459a3698badff578e117409.mockapi.io/tweets',
     {
@@ -37,5 +40,10 @@ app.post('/tweets', async (req, res) => {
       }),
     },
   );
-  return res.send(tweets);
+  const resJson = await tweets.json();
+  return res.send(resJson);
+});
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`);
 });
