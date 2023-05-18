@@ -1,4 +1,5 @@
 const { getMessaging } = require('firebase-admin/messaging');
+const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 const sendNotification = async (token, msg) => {
   try {
@@ -24,6 +25,22 @@ const sendNotification = async (token, msg) => {
   }
 };
 
+const sendNotifications = async (tokenToExclude, msg) => {
+  try {
+    const response = await fetch(
+      'https://6459a3698badff578e117409.mockapi.io/tokens',
+    );
+    const tokens = await response.json();
+    await Promise.all(
+      tokens
+        .filter(({ token }) => token !== tokenToExclude)
+        .map(({ token }) => sendNotification(token, msg)),
+    );
+  } catch (e) {
+    console.log("ERROR: ", e);
+  }
+};
+
 module.exports = {
-  sendNotification,
+  sendNotifications,
 };

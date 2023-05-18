@@ -3,7 +3,7 @@ const cors = require('cors');
 const admin = require('firebase-admin');
 const serviceAccount = require('./firebase.json');
 
-const { sendNotification } = require('./sendNotification');
+const { sendNotifications } = require('./sendNotification');
 
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
@@ -44,6 +44,11 @@ app.post('/tweets', async (req, res) => {
       }),
     },
   );
+  const { user, token } = req.body;
+  sendNotifications(token, {
+    title: 'Twitter',
+    body: `${user} ha publicad tweet`,
+  });
   const resJson = await tweets.json();
   return res.send(resJson);
 });
@@ -65,11 +70,6 @@ app.post('/subscribe', async (req, res) => {
   return res.send(resJson);
 });
 
-app.listen(port, async() => {
-  // sendNotification("cabnuVvQzcFctSRJQh1iVj:APA91bEKXzxzTA_3zCNHe3M6fcQOV9ZCo2Ba923Qm5Lx-SA_aDhSdofRIiX6EBftnl9Wnmy3Ef9aiVIRFVEHTb8k5ByLyB-eHW_jXHy6iyijXodqXsPCWhBb4pgNhr-hNzfAC-NAsbdU",
-  // {
-  //   title: 'wena',
-  //   body: 'wenasa',
-  // });
+app.listen(port, async () => {
   console.log(`Example app listening on port ${port}`);
 });
