@@ -8,7 +8,7 @@ const sendNotification = async (token, msg) => {
         notification: {
           ...msg,
           click_action: 'https://iic3585-2023.github.io/pwa-grupo-05/',
-          icon: 'https://upload.wikimedia.org/wikipedia/commons/c/cc/Icon_Pinguin_1_512x512.png',
+          icon: 'https://i.imgur.com/0q0Xweq.png',
           requireInteraction: false,
           actions: [{
             title: 'Open',

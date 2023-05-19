@@ -47,7 +47,7 @@ app.post('/tweets', async (req, res) => {
   const { user, token } = req.body;
   sendNotifications(token, {
     title: 'Twitter',
-    body: `${user} ha publicad tweet`,
+    body: `${user} ha publicado tweet`,
   });
   const resJson = await tweets.json();
   return res.send(resJson);
